@@ -3,7 +3,7 @@
 import { useRef } from "react"
 
 export default function Home() {
-  const codeRef = useRef<HTMLInputElement>(null)
+  const codeRef = useRef<HTMLTextAreaElement>(null)
   const domRef = useRef<HTMLInputElement>(null)
 
   function onCodeChange() {
