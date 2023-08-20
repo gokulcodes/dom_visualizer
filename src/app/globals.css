@@ -1,0 +1,83 @@
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  padding: 0;
+  margin: 0;
+}
+
+.root {
+  height: 95vh;
+}
+
+.sub-root {
+  display: flex;
+  padding: 1rem;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  /* min-height: 100vh; */
+}
+
+.sub-root_section {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  border: 1px solid rgba(255, 140, 0, 0.288);
+
+}
+
+.code_textarea {
+  padding: 0.5rem;
+  outline-style: none;
+  border: none;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: #047857;
+  background-color: transparent;
+}
+
+.code_run_button {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: #000000;
+  background-color: rgba(255, 140, 0, 0.531);
+  border: none;
+  cursor: pointer;
+}
+
+.code_run_button:hover {
+  transition: all 0.5s ease-in;
+  background-color: rgba(255, 140, 0, 1);
+}
+
+.dom-visualizer {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
