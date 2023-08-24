@@ -1,10 +1,24 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
+import ACE from "ace-builds"
+
+"ace/"
 
 export default function Home() {
   const codeRef = useRef<HTMLTextAreaElement>(null)
   const domRef = useRef<HTMLInputElement>(null)
+
+  let editor = null
+
+
+  useEffect(() => {
+    editor = ACE.edit('coding-area', {
+      mode: "",
+    })
+    editor.resize()
+  })
+
 
   function onCodeChange() {
     if (domRef.current && codeRef.current) {
@@ -19,10 +33,10 @@ export default function Home() {
         <section id="coding-area" className="sub-root_section" >
           <textarea autoFocus ref={codeRef} className="code_textarea" >
           </textarea>
-          <button onClick={onCodeChange} className="code_run_button" >Run</button>
         </section>
 
-        <section ref={domRef} id="coding-area" className="sub-root_section" >
+        <button onClick={onCodeChange} className="code_run_button" >Run</button>
+        <section ref={domRef} className="sub-root_section" >
           <div className="dom-visualizer ">
 
           </div>
