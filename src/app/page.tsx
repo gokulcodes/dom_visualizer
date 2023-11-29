@@ -1,48 +1,74 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import ACE from "ace-builds"
+import { useEffect, useRef, useState } from "react";
 
-"ace/"
+import Editor from "@monaco-editor/react";
+import Tree from "react-d3-tree";
 
 export default function Home() {
-  const codeRef = useRef<HTMLTextAreaElement>(null)
-  const domRef = useRef<HTMLInputElement>(null)
+  const codeRef = useRef<HTMLIFrameElement>(null);
+  const domRef = useRef<HTMLInputElement>(null);
+  const [codeStorage, setCodeStorage] = useState<string>("");
+  const [rootRef, setRootRef] = useState<Array>([]);
 
-  let editor = null
-
+  function onChange(e: string) {
+    setCodeStorage(e);
+  }
 
   useEffect(() => {
-    editor = ACE.edit('coding-area', {
-      mode: "",
-    })
-    editor.resize()
-  })
+    const iframeDoc = document.getElementById("preview");
+    const rootNode = iframeDoc?.contentDocument?.children;
 
+    function rootDFS(root: any): any {
+      if (!root || root.length == 0) {
+        return [];
+      }
+      let collections = [];
+      for (let child of root) {
+        let node = {};
+        node.name = child.localName;
+        node.children = rootDFS(child.children);
+        collections.push(node);
+      }
 
-  function onCodeChange() {
-    if (domRef.current && codeRef.current) {
-      domRef.current.insertAdjacentHTML("afterbegin", codeRef.current.value)
+      return collections;
     }
+
+    setRootRef(rootDFS(rootNode));
+  }, [codeStorage]);
+
+  function handleEditorValidation(markers) {
+    // model markers
+    markers.forEach((marker) => console.log("onValidate:", marker.message));
   }
 
   return (
     <div className="root">
       <main className="sub-root">
-
-        <section id="coding-area" className="sub-root_section" >
-          <textarea autoFocus ref={codeRef} className="code_textarea" >
-          </textarea>
+        <section id="coding-area" className="sub-root_section">
+          <Editor
+            height="95vh"
+            defaultLanguage="html"
+            theme="vs-dark"
+            onChange={onChange}
+            defaultValue="// let's write some broken code 😈"
+            onValidate={handleEditorValidation}
+          />
         </section>
 
-        <button onClick={onCodeChange} className="code_run_button" >Run</button>
-        <section ref={domRef} className="sub-root_section" >
+        <section ref={domRef} className="sub-root_section">
           <div className="dom-visualizer ">
-
+            <iframe id="preview" ref={codeRef} srcDoc={codeStorage}>
+              <p>Browser does not support iframes.</p>
+            </iframe>
+            {rootRef.length > 0 ? (
+              <div id="treeWrapper">
+                <Tree data={rootRef} />
+              </div>
+            ) : null}
           </div>
         </section>
-
       </main>
     </div>
-  )
+  );
 }
